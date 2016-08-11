@@ -55,6 +55,12 @@ namespace DrawerBackup.StorageFileSystem.FlatFileSystem
             }
         }
 
+        public override long Size( )
+        {
+            return ListImages( ).Select(p => Open(p))
+                .Sum(p => p.Size( ));
+        }
+
         private string GetImageName(string path)
         {
             DirectoryInfo dir = new DirectoryInfo(path);

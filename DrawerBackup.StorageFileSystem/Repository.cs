@@ -47,6 +47,12 @@ namespace DrawerBackup.StorageFileSystem
         public abstract IEnumerable<string> ListImages( );
 
         /// <summary>
+        /// Get the repository size
+        /// </summary>
+        /// <returns></returns>
+        public abstract long Size( );
+        
+        /// <summary>
         /// Check if the image exists in the repository
         /// </summary>
         /// <param name="name"></param>
