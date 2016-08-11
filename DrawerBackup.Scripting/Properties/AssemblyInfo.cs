@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DrawerBackup Performance Variables")]
-[assembly: AssemblyDescription("Can manage variables which store performance data for performance reports.")]
+[assembly: AssemblyTitle("DrawerBackup Scripting")]
+[assembly: AssemblyDescription("Scripting Library for DrawerBackup")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("mInternauta")]
-[assembly: AssemblyProduct("DrawerBackup.PerformanceVariables")]
+[assembly: AssemblyProduct("DrawerBackup.Scripting")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c878088f-347a-4379-9b77-07ebe9b376c6")]
+[assembly: Guid("c8e6835e-fb61-45c8-bd93-a47b312e87ea")]
 
 // Version information for an assembly consists of the following four values:
 //
