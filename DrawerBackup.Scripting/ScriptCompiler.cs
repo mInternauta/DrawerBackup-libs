@@ -19,6 +19,7 @@ namespace DrawerBackup.Scripting
         private string scriptId;
         private Stream stream;
         private bool compiled;
+        private Assembly assembly;
 
         public ScriptCompiler(string id, Stream stream)
         {
@@ -38,7 +39,7 @@ namespace DrawerBackup.Scripting
         /// </summary>
         /// <typeparam name="TInterface"></typeparam>
         /// <returns></returns>
-        public TInterface MainPoint<TInterface>( ) 
+        public TInterface MainPoint<TInterface>( )
         {
             TInterface obj = default(TInterface);
 
@@ -46,12 +47,14 @@ namespace DrawerBackup.Scripting
             Compile( );
 
             // Load the assemnly
-            Assembly assm = Assembly.LoadFile(getScriptPath( ));
+            LoadAssembly( );
 
-            var search = assm.GetTypes( ).Where(p => p.GetInterface(typeof(TInterface).Name, true) != null);
-            if(search.Any())
+            var search = assembly
+                    .GetTypes( )
+                    .Where(p => p.GetInterface(typeof(TInterface).Name, true) != null);
+            if (search.Any( ))
             {
-                obj = (TInterface)Activator.CreateInstance(search.First( ));
+                obj = (TInterface) Activator.CreateInstance(search.First( ));
             }
             else
             {
@@ -59,6 +62,21 @@ namespace DrawerBackup.Scripting
             }
 
             return obj;
+        }
+
+        private void LoadAssembly( )
+        {
+            if (this.assembly == null)
+            {
+                using (MemoryStream assmContent = new MemoryStream( ))
+                {
+                    using (Stream assemblyFile = File.Open(getScriptPath( ), FileMode.Open))
+                    {
+                        assemblyFile.CopyTo(assmContent);
+                    }
+                    this.assembly = Assembly.Load(assmContent.ToArray( ));
+                }
+            }
         }
 
         /// <summary>
@@ -83,8 +101,12 @@ namespace DrawerBackup.Scripting
             CompilerResults results = CompileCode( );
             if(results.Errors.Count != 0)
             {
-                this.compiled = true;
                 ThrowScriptError(results);
+            }
+            else
+            {
+                this.assembly = null;
+                this.compiled = true;
             }
         }
 

@@ -13,12 +13,15 @@ namespace DrawerBackup.Scripting
     public class ScriptDirectory
     {
         private string scriptDir;
+        private Dictionary<string, ScriptCompiler> compilers;
 
         public ScriptDirectory( )
         {
             this.scriptDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts\\");
             if (Directory.Exists(scriptDir) == false)
                 Directory.CreateDirectory(scriptDir);
+
+            this.compilers = new Dictionary<string, ScriptCompiler>( );
         }
 
         /// <summary>
@@ -64,9 +67,13 @@ namespace DrawerBackup.Scripting
         public ScriptCompiler Compiler(string scriptName)
         {
             string scriptPath = GetScriptPath(scriptName);
+            if (compilers.ContainsKey(scriptName) == false)
+            {
+                 compilers.Add(scriptName, new Scripting.ScriptCompiler(scriptName,
+                    File.Open(scriptPath, FileMode.Open)));
+            }
 
-            return new Scripting.ScriptCompiler(Path.GetFileNameWithoutExtension(scriptPath),
-                File.Open(scriptPath, FileMode.Open));
+            return compilers[scriptName];
         }
 
         /// <summary>
