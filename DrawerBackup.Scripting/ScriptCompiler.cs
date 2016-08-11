@@ -107,6 +107,8 @@ namespace DrawerBackup.Scripting
             {
                 this.assembly = null;
                 this.compiled = true;
+
+                LoadAssembly( );
             }
         }
 

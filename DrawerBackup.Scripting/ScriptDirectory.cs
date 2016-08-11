@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,6 +17,12 @@ namespace DrawerBackup.Scripting
         private string scriptDir;
         private Dictionary<string, ScriptCompiler> compilers;
 
+
+        /// <summary>
+        /// References
+        /// </summary>
+        public Collection<string> References { get; set; }
+
         public ScriptDirectory( )
         {
             this.scriptDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts\\");
@@ -22,6 +30,7 @@ namespace DrawerBackup.Scripting
                 Directory.CreateDirectory(scriptDir);
 
             this.compilers = new Dictionary<string, ScriptCompiler>( );
+            References = new Collection<string>( );
         }
 
         /// <summary>
@@ -60,6 +69,28 @@ namespace DrawerBackup.Scripting
         }
 
         /// <summary>
+        /// Compile all scripts in the directory
+        /// </summary>
+        public void CompileAll()
+        {
+            Trace.WriteLine("Compiling all scripts in the directory..", "Scripts");
+            foreach (string script in All())
+            {
+                try
+                {
+
+                    Trace.WriteLine("Compiling: " + script, "Scripts");
+                    var compiler = Compiler(script);
+                    compiler.Compile( );
+                }
+                catch (Exception exp)
+                {
+                    Trace.WriteLine("Cant compile the script " + script + "\r\n" + exp.Message, "Scripts");
+                }
+            }
+        }
+
+        /// <summary>
         /// Get the compiler for the script
         /// </summary>
         /// <param name="scriptName">The name of the script</param>
@@ -69,8 +100,12 @@ namespace DrawerBackup.Scripting
             string scriptPath = GetScriptPath(scriptName);
             if (compilers.ContainsKey(scriptName) == false)
             {
-                 compilers.Add(scriptName, new Scripting.ScriptCompiler(scriptName,
-                    File.Open(scriptPath, FileMode.Open)));
+
+                var compiler = new ScriptCompiler(scriptName,
+                    File.Open(scriptPath, FileMode.Open));
+                compiler.References = References;
+                compilers.Add(scriptName, compiler);
+
             }
 
             return compilers[scriptName];
