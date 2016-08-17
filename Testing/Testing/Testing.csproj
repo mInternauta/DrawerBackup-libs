@@ -50,10 +50,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="NotifierTest.cs" />
     <Compile Include="PerfVarsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DrawerBackup.Notifiers\DrawerBackup.Notifiers.csproj">
+      <Project>{339397EA-8D68-4CE9-BE3F-D2D6535B608E}</Project>
+      <Name>DrawerBackup.Notifiers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DrawerBackup.PerformanceVariables\DrawerBackup.PerformanceVariables.csproj">
       <Project>{C878088F-347A-4379-9B77-07EBE9B376C6}</Project>
       <Name>DrawerBackup.PerformanceVariables</Name>
