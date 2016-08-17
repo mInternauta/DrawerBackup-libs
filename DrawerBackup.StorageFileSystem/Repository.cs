@@ -24,21 +24,22 @@ namespace DrawerBackup.StorageFileSystem
         /// <summary>
         /// Open the image
         /// </summary>
-        /// <param name="name">Name of the Image</param>
+        /// <param name="Id">Id of the Image</param>
         /// <returns></returns>
-        public abstract Image Open(string name);
+        public abstract Image Open(string id);
 
         /// <summary>
         /// Creates the image in the repository
         /// </summary>
         /// <param name="name">Name of the Image</param>
-        public abstract void Create(string name);
+        /// <param name="clientName">Name of the Client</param>
+        public abstract string Create(string name, string clientName);
 
         /// <summary>
         /// Delete the image from the repository
         /// </summary>
-        /// <param name="name">Name of the Image</param>
-        public abstract void Delete(string name);
+        /// <param name="name">Id of the Image</param>
+        public abstract void Delete(string id);
 
         /// <summary>
         /// List all the images
@@ -51,6 +52,7 @@ namespace DrawerBackup.StorageFileSystem
         /// </summary>
         /// <returns></returns>
         public abstract long Size( );
+
         
         /// <summary>
         /// Check if the image exists in the repository

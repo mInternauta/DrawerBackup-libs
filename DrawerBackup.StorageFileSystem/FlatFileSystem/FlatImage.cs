@@ -10,19 +10,12 @@ namespace DrawerBackup.StorageFileSystem.FlatFileSystem
     public class FlatImage : Image
     {
         private DirectoryInfo imageDir;
-        private string _Name;
 
-        public FlatImage(string name, string imagePath)
+        public FlatImage(FlatImageInfo info, string imagePath)
         {
-            this._Name = name;
+            this.Name = info.Name;
+            this.Id = info.Id;
             this.imageDir = new DirectoryInfo(imagePath);
-        }
-        public override string Name
-        {
-            get
-            {
-                return _Name;
-            }
         }
 
         public override void Delete(string name)

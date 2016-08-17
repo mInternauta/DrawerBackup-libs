@@ -12,46 +12,73 @@ namespace DrawerBackup.StorageFileSystem.FlatFileSystem
     /// </summary>
     public class FlatRepository : Repository
     {
+        private ImageDb imagedb;
+
         public FlatRepository(string repositoryPath) : base(repositoryPath)
         {
+            this.imagedb = new ImageDb(repositoryPath);
         }
-
-        public override void Create(string name)
+        
+        public override string Create(string name, string clientName)
         {
-            string imagePath = GetImagePath(name);
+            string imagePath = GetImagePath(name, clientName);
             if (Directory.Exists(imagePath) == false)
                 Directory.CreateDirectory(imagePath);
+            
+            FlatImageInfo info = new FlatImageInfo( ) {
+                Name = name,
+                Relativepath = imagePath.Replace(RepositoryPath, "")
+            };
+
+            imagedb.Add(info);
+
+            return info.Id;
         }
-        public override void Delete(string name)
+
+        public override void Delete(string id)
         {
-            string imagePath = GetImagePath(name);
-            if(Directory.Exists(imagePath))
+            var search = this.imagedb.Where(p => p.Id == id);
+            if (search.Any( ))
             {
-                Directory.Delete(imagePath, true);
+                string imagePath = GetImagePath(id);
+                if (Directory.Exists(imagePath))
+                {
+                    Directory.Delete(imagePath, true);
+                }
+
+                imagedb.Remove(search.First( ));
             }
         }
 
-        public override bool Exists(string name)
+        public override bool Exists(string id)
         {
-            return Directory.Exists(GetImagePath(name));
+            return Directory.Exists(GetImagePath(id));
         }
 
         public override IEnumerable<string> ListImages( )
         {
-            return Directory.EnumerateDirectories(RepositoryPath, "FIMG-*")
-                .Select(p => GetImageName(p));
+            foreach (FlatImageInfo info in imagedb)
+            {
+                string path = Path.Combine(RepositoryPath, info.Relativepath);
+                if(Directory.Exists(path))
+                {
+                    yield return info.Id;
+                }
+            }
         }
 
-        public override Image Open(string name)
+        public override Image Open(string id)
         {
-            string imagePath = GetImagePath(name);
-            if (Directory.Exists(imagePath))
+            string imagePath = GetImagePath(id);
+            var search = this.imagedb.Where(p => p.Id == id);
+
+            if (Directory.Exists(imagePath) && search.Any())
             {
-                return new FlatImage(name, imagePath);
+                return new FlatImage(search.First(), imagePath);
             }
             else
             {
-                throw new DirectoryNotFoundException("Cant find the image: " + name);
+                throw new DirectoryNotFoundException("Cant find the image: " + id);
             }
         }
 
@@ -67,10 +94,22 @@ namespace DrawerBackup.StorageFileSystem.FlatFileSystem
 
             return dir.Name.Replace("FIMG-", "");
         }
-
-        private string GetImagePath(string name)
+        private string GetImagePath(string id)
         {
-            return Path.Combine(RepositoryPath, "FIMG-" + name);
+            var search = this.imagedb.Where(p => p.Id == id);
+            string path = "";
+
+            if(search.Any())
+            {
+                path = Path.Combine(RepositoryPath, search.First( ).Relativepath);
+            }
+
+            return path;
+        }
+
+        private string GetImagePath(string name, string clientName)
+        {
+            return Path.Combine(RepositoryPath, clientName + "\\FIMG-" + name);
         }
 
     }

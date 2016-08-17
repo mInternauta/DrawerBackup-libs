@@ -13,9 +13,14 @@ namespace DrawerBackup.StorageFileSystem
     public abstract class Image : IDisposable
     {
         /// <summary>
-        /// Name of the Entry
+        /// Name of the Image
         /// </summary>
-        public abstract string Name { get; }
+        public string Name { get; protected set; }
+
+        /// <summary>
+        /// Id of the Image
+        /// </summary>
+        public string Id { get; protected set; }
 
         /// <summary>
         /// Open a stream for the entry
