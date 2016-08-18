@@ -8,6 +8,17 @@ namespace DrawerBackup.Notifiers.Builtin.Email
 {
     public class EmailSettings : Dictionary<string,string>
     {
+        public EmailSettings( )
+        {
+            this.AddIfNotExists("SmtpUseSsl", "false");
+            this.AddIfNotExists("SmtpPort", "25");
+            this.AddIfNotExists("SmtpServer", "");
+            this.AddIfNotExists("From", "");
+            this.AddIfNotExists("To", "");
+            this.AddIfNotExists("SmtpUser", "");
+            this.AddIfNotExists("SmtpPassword", "");
+        }
+        
         /// <summary>
         /// Use SSL for the Smtp Server
         /// </summary>

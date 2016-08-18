@@ -47,6 +47,7 @@
     <Compile Include="Builtin\Email\EmailNotifier.cs" />
     <Compile Include="Builtin\Email\EmailSettings.cs" />
     <Compile Include="ConfigManager.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="INotifier.cs" />
     <Compile Include="NotiferSettings.cs" />
     <Compile Include="Notification.cs" />

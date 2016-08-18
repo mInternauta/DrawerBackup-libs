@@ -14,8 +14,7 @@ namespace DrawerBackup.Notifiers
     {
         public NotiferSettings( )
         {
-            if (this.ContainsKey("NotifierType") == false)
-                this["NotifierType"] = typeof(EmailNotifier).FullName;
+            this.AddIfNotExists("NotifierType", typeof(EmailNotifier).FullName);
         }
 
         public string NotifierType

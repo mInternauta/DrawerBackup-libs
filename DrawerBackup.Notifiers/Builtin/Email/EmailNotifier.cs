@@ -75,5 +75,19 @@ namespace DrawerBackup.Notifiers.Builtin.Email
             templatePath = Path.Combine(templatePath, "Email.html");
             return templatePath;
         }
+
+        public Dictionary<string, string> GetSettings( )
+        {
+            return this.settings;
+        }
+
+        public void SetSettings(Dictionary<string, string> cfg)
+        {
+            foreach (var set in cfg)
+            {
+                this.settings[set.Key] = set.Value;
+            }
+            ConfigManager.Save(this.settings);
+        }
     }
 }

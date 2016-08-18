@@ -16,5 +16,17 @@ namespace DrawerBackup.Notifiers
         /// </summary>
         /// <param name="notification"></param>
         void Notify(Notification notification);
+
+        /// <summary>
+        /// Get the notifier settings
+        /// </summary>
+        /// <returns></returns>
+        Dictionary<string, string> GetSettings( );
+
+        /// <summary>
+        /// Set the notifier settings
+        /// </summary>
+        /// <param name="settings"></param>
+        void SetSettings(Dictionary<string, string> settings);
     }
 }
