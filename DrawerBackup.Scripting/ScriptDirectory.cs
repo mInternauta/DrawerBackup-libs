@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace DrawerBackup.Scripting
         /// <summary>
         /// References
         /// </summary>
-        public Collection<string> References { get; set; }
+        public Collection<Assembly> References { get; set; }
 
         public ScriptDirectory( )
         {
@@ -30,7 +31,7 @@ namespace DrawerBackup.Scripting
                 Directory.CreateDirectory(scriptDir);
 
             this.compilers = new Dictionary<string, ScriptCompiler>( );
-            References = new Collection<string>( );
+            References = new Collection<Assembly>( );
         }
 
         /// <summary>
@@ -100,15 +101,34 @@ namespace DrawerBackup.Scripting
             string scriptPath = GetScriptPath(scriptName);
             if (compilers.ContainsKey(scriptName) == false)
             {
-
                 var compiler = new ScriptCompiler(scriptName,
                     File.Open(scriptPath, FileMode.Open));
-                compiler.References = References;
+
+                compiler.References = References.Select(p => p.Location).ToList( );
+                AddConfiguredRefs(scriptPath, compiler);
+
                 compilers.Add(scriptName, compiler);
 
             }
 
             return compilers[scriptName];
+        }
+
+        private static void AddConfiguredRefs(string scriptPath, ScriptCompiler compiler)
+        {
+            var references = ScriptReference.Load(scriptPath);
+            foreach (var item in references)
+            {
+                if (string.IsNullOrEmpty(item.Location) == false)
+                {
+                    compiler.References.Add(item.Location);
+                }
+                else
+                {
+                    Assembly assm = Assembly.Load(item.Assembly);
+                    compiler.References.Add(assm.Location);
+                }
+            }
         }
 
         /// <summary>

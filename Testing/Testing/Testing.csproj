@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -53,6 +54,7 @@
     <Compile Include="NotifierTest.cs" />
     <Compile Include="PerfVarsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptRefsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DrawerBackup.Notifiers\DrawerBackup.Notifiers.csproj">
@@ -62,6 +64,10 @@
     <ProjectReference Include="..\..\DrawerBackup.PerformanceVariables\DrawerBackup.PerformanceVariables.csproj">
       <Project>{C878088F-347A-4379-9B77-07EBE9B376C6}</Project>
       <Name>DrawerBackup.PerformanceVariables</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DrawerBackup.Scripting\DrawerBackup.Scripting.csproj">
+      <Project>{C8E6835E-FB61-45C8-BD93-A47B312E87EA}</Project>
+      <Name>DrawerBackup.Scripting</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

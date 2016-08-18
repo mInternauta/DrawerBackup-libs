@@ -26,13 +26,13 @@ namespace DrawerBackup.Scripting
             this.scriptId = id;
             this.stream = stream;
 
-            References = new Collection<string>( );
+            References = new List<string>( );
         }
 
         /// <summary>
         /// References
         /// </summary>
-        public Collection<string> References { get; set; }
+        public List<string> References { get; set; }
 
         /// <summary>
         /// Get a object instance from the script which represents the main point
@@ -115,12 +115,7 @@ namespace DrawerBackup.Scripting
         private CompilerResults CompileCode()
         {
             string scriptPath = getScriptPath( );
-            string code = "";
-
-            using (StreamReader rd = new StreamReader(stream))
-            {
-                code = rd.ReadToEnd( );
-            }
+            string code = getCode( );
 
             CompilerResults results = null;
 
@@ -142,13 +137,32 @@ namespace DrawerBackup.Scripting
             return results;
         }
 
+        private string getCode( )
+        {
+            string code = "";
+
+            using (StreamReader rd = new StreamReader(stream))
+            {
+                code = rd.ReadToEnd( );
+            }
+
+            return code;
+        }
+
         private string getScriptPath( )
+        {
+            string scriptBinDir = ScriptDir( );
+
+            string scriptPath = Path.Combine(scriptBinDir, scriptId + ".dll");
+            return scriptPath;
+        }
+
+        private static string ScriptDir( )
         {
             string scriptBinDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts\\Compiled\\");
             if (Directory.Exists(scriptBinDir) == false)
                 Directory.CreateDirectory(scriptBinDir);
-            string scriptPath = Path.Combine(scriptBinDir, scriptId + ".dll");
-            return scriptPath;
+            return scriptBinDir;
         }
 
         private void ThrowScriptError(CompilerResults cr)
