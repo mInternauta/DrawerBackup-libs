@@ -64,6 +64,32 @@ namespace DrawerBackup.Scripting
             return obj;
         }
 
+        /// <summary>
+        /// Get a object instance from the script which represents the main point
+        /// </summary>
+        /// <typeparam name="TObject"></typeparam>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        public TObject MainPoint<TObject>(string typeName)
+        {
+            // Compile
+            Compile( );
+
+            // Load the assemnly
+            LoadAssembly( );
+
+            var type = assembly.GetType(typeName);
+
+            if(type != null)
+            {
+                return (TObject)Activator.CreateInstance(type);
+            }
+            else
+            {
+                throw new EntryPointNotFoundException("Cant found a type who's implements: " + typeName);
+            }
+        }
+
         private void LoadAssembly( )
         {
             if (this.assembly == null)
